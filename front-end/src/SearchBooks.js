@@ -19,13 +19,14 @@ const SearchBooks = () => {
     }
   };
 
-  // Function to save the selected book to the database
+  // Function to save the selected book to the database. Uses /books as post link
   const saveBook = async (book) => {
     try {
       const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/books`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          // !stringify converts Javascript object to JSON
         },
         body: JSON.stringify(book), // Send the entire book object
       });
@@ -43,7 +44,10 @@ const SearchBooks = () => {
   };
 
   return (
-    <div>
+  // !styling for milestone library text.
+    <div style={{ textAlign: 'center', padding: '20px' }}> {/* Center and add padding */}
+    <h1 style={{ marginBottom: '20px' }}>Milestone Library</h1> {/* Space below header */}
+    
       <input
         type="text"
         value={query}
