@@ -6,7 +6,7 @@ const SearchBooks = () => {
 
   const searchBooks = async () => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/search/${query}`);
+      const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/search/${query}`); // Fixed here
 
       if (!response.ok) {
         throw new Error('Network response was not ok');
@@ -19,14 +19,11 @@ const SearchBooks = () => {
     }
   };
 
-  // Function to save the selected book to the database. Uses /books as post link
   const saveBook = async (book) => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/books`, {
-        method: 'POST',
+      const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/books`, { 
         headers: {
           'Content-Type': 'application/json',
-          // !stringify converts Javascript object to JSON
         },
         body: JSON.stringify(book), // Send the entire book object
       });
@@ -37,53 +34,58 @@ const SearchBooks = () => {
 
       const savedBook = await response.json();
       console.log('Book saved:', savedBook);
-      // Optionally, you can give feedback to the user or update UI
     } catch (error) {
       console.error('Error saving book:', error);
     }
   };
 
   return (
-  // !styling for milestone library text.
-    <div style={{ textAlign: 'center', padding: '20px' }}> {/* Center and add padding */}
-    <h1 style={{ marginBottom: '20px' }}>Milestone Library</h1> {/* Space below header */}
-    
-      <input
-        type="text"
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        placeholder="Search for books"
-      />
-      {/*!search button */}
-      <button onClick={searchBooks}>Search</button>
+    <div
+      style={{
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        minHeight: '100vh', // Ensures the background covers the whole page
+        textAlign: 'center',
+        padding: '20px',
+      }}
+    >
+      <div style={{ textAlign: 'center', padding: '20px' }}>
+        <h1 style={{ marginBottom: '20px' }}>Milestone Library</h1>
 
-      {/* Display list of books */}
-      <div>
-        {books.length > 0 ? (
-          books.map((book, index) => (
-            <div key={index}>
-              <h3 onClick={() => saveBook(book)} style={{ cursor: 'pointer', color: 'blue' }}>
-                {book.title}
-              </h3>
-              <p>ISBN: {book.isbn}</p>
-              <p>Key: {book.key}</p>
-              <p>Authors: {book.authors ? book.authors.join(', ') : 'Unknown'}</p>
-             {/* open library link for images */}
-              {book.cover_i && (
-                 
-                 <img src={`https://covers.openlibrary.org/b/id/${book.cover_i}-L.jpg`} alt={`Cover of ${book.title}`} />
-              )}
-             {/* Add the Save for Later button */}
-             <button onClick={() => saveBook(book)}>Save for Later</button>
-            </div>
-          ))
-        ) : (
-          <p>No books found</p>
-        )}
+        <input
+          type="text"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Search for books"
+        />
+        <button onClick={searchBooks}>Search</button>
+
+        <div>
+          {books.length > 0 ? (
+            books.map((book, index) => (
+              <div key={index}>
+                <h3 onClick={() => saveBook(book)} style={{ cursor: 'pointer', color: 'blue' }}>
+                  {book.title}
+                </h3>
+                <p>ISBN: {book.isbn}</p>
+                <p>Key: {book.key}</p>
+                <p>Authors: {book.authors ? book.authors.join(', ') : 'Unknown'}</p>
+                {book.cover_i && (
+                  <img
+                    src={`https://covers.openlibrary.org/b/id/${book.cover_i}-L.jpg`} // Fixed here
+                    alt={`Cover of ${book.title}`} // Fixed here
+                  />
+                )}
+                <button onClick={() => saveBook(book)}>Save for Later</button>
+              </div>
+            ))
+          ) : (
+            <p>No books found</p>
+          )}
+        </div>
       </div>
     </div>
   );
 };
-
 
 export default SearchBooks;
